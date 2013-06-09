@@ -48,6 +48,16 @@ PRODUCT_PACKAGES += \
     libsecril-client-sap \
     SamsungServiceMode
 
+# NFC
+PRODUCT_PACKAGES += \
+	nfc.exynos4 \
+    libnfc \
+    libnfc_jni \
+    Nfc \
+    Tag
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml
 
 # NFCEE access control
 ifeq ($(TARGET_BUILD_VARIANT),user)
