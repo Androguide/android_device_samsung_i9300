@@ -30,9 +30,14 @@ PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 # Init files
+# Added ubuntu-session stuff & insmod script
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/fstab.smdk4x12:root/fstab.smdk4x12 \
-    $(LOCAL_PATH)/init.smdk4x12.rc:root/init.smdk4x12.rc
+    $(LOCAL_PATH)/init.smdk4x12.rc:root/init.smdk4x12.rc \
+    $(LOCAL_PATH)/ubuntu-session/GT-I9300.conf:system/GT-I9300.conf \
+    $(LOCAL_PATH)/ubuntu-session/98ubuntu-session:system/etc/init.d/98ubuntu-session \
+    $(LOCAL_PATH)/ubuntu-session/Shell.qml:system/Shell.qml \
+    $(LOCAL_PATH)/insmod/99insmod:system/etc/init.d/99insmod
 
 # Audio
 PRODUCT_COPY_FILES += \
