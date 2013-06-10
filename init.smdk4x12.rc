@@ -36,11 +36,14 @@ on fs
     chmod 0771 /efs
 
 on post-fs-data
-     # we will remap this as /mnt/sdcard with the sdcard fuse tool
-     mkdir /data/media 0775 media_rw media_rw
-     chown media_rw media_rw /data/media
+    # we will remap this as /mnt/sdcard with the sdcard fuse tool
+    mkdir /data/media 0775 media_rw media_rw
+    chown media_rw media_rw /data/media
 
-# data/log
+    # Insmod bcmdhd (wifi) module as an attempt to fix Wi-Fi on Ubuntu Touch
+    insmod /system/lib/modules/dhd.ko firmware_path=/system/etc/wifi/bcmdhd_sta.bin nvram_path=/system/etc/wifi/nvram_net.txt
+
+	# data/log
     mkdir /data/log 0775 system log
     chown system log /data/log
     chmod 0775 /data/log
