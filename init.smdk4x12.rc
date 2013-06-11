@@ -43,6 +43,18 @@ on post-fs-data
 # Insmod bcmdhd (wifi) module as an attempt to fix Wi-Fi on Ubuntu Touch
     insmod /system/lib/modules/dhd.ko firmware_path=/system/etc/wifi/bcmdhd_sta.bin nvram_path=/system/etc/wifi/nvram_net.txt
 
+# Initialize zRam and start it with 2 devices and 256mb SNAPPY compression
+# This is an attempt to improve Ubuntu Touch multitasking performance
+# And to try and fix lockups when switching apps while several are open already (i9300)
+	echo 1 > /sys/block/zram0/reset
+	modprobe zram num_devices=2
+	echo 134217728 > /sys/block/zram0/disksize
+	echo 134217728 > /sys/block/zram0/disksize
+	mkswap /dev/block/zram0
+	mkswap /dev/block/zram1
+	swapon /dev/block/zram0
+	swapon /dev/block/zram1
+
 # data/log
     mkdir /data/log 0775 system log
     chown system log /data/log
