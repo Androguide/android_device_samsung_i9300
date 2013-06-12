@@ -144,7 +144,7 @@ on post-fs-data
     chown system system /sys/class/backlight/panel/auto_brightness
 
     # change permissions to allow the Ubuntu Touch automatic brightness adjustment feature to function properly
-    chmod 0666 system /sys/class/backlight/panel/auto_brightness
+    chmod 0666 /sys/class/backlight/panel/auto_brightness
 
     chown system system /sys/class/backlight/panel/brightness
     # change permissions to allow the Ubuntu Touch brightness slider to function properly
