@@ -30,14 +30,14 @@ PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 # Init files
-# Added ubuntu-session stuff & insmod script
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/fstab.smdk4x12:root/fstab.smdk4x12 \
     $(LOCAL_PATH)/init.smdk4x12.rc:root/init.smdk4x12.rc
 
 # Audio
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/tiny_hw.xml:system/etc/sound/m0
+    $(LOCAL_PATH)/configs/tiny_hw.xml:system/etc/sound/m0 \
+    $(LOCAL_PATH)/audio/silence.wav:system/etc/sound/silence.wav
 
 # Gps
 PRODUCT_COPY_FILES += \
@@ -47,17 +47,13 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libsecril-client \
     libsecril-client-sap \
+    tinyplay
 
 # NFC
 PRODUCT_PACKAGES += \
-    nfc.exynos4 \
+	nfc.exynos4 \
     libnfc \
-    libnfc_jni \
-    Nfc \
-    Tag
-
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml
+    libnfc_jni
 
 # NFCEE access control
 ifeq ($(TARGET_BUILD_VARIANT),user)
@@ -69,13 +65,11 @@ endif
 PRODUCT_COPY_FILES += \
     $(NFCEE_ACCESS_PATH):system/etc/nfcee_access.xml
 
-PRODUCT_PACKAGES += \
-    com.android.nfc_extras
-
 $(call inherit-product, vendor/cm/config/nfc_enhanced.mk)
 
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.ril_class=SamsungExynos4RIL \
     mobiledata.interfaces=pdp0,wlan0,gprs,ppp0 \
     ro.telephony.call_ring.multiple=false \
     ro.telephony.call_ring.delay=3000

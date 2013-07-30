@@ -36,9 +36,6 @@ on fs
     chmod 0771 /efs
 
 on post-fs-data
-# we will remap this as /mnt/sdcard with the sdcard fuse tool
-    mkdir /data/media 0775 media_rw media_rw
-    chown media_rw media_rw /data/media
 
 # Insmod bcmdhd (wifi) module as an attempt to fix Wi-Fi on Ubuntu Touch
     insmod /system/lib/modules/dhd.ko firmware_path=/system/etc/wifi/bcmdhd_sta.bin nvram_path=/system/etc/wifi/nvram_net.txt
@@ -46,14 +43,18 @@ on post-fs-data
 # Initialize zRam and start it with 2 devices and 256mb SNAPPY compression
 # This is an attempt to improve Ubuntu Touch multitasking performance
 # And to try and fix lockups when switching apps while several are open already (i9300)
-	echo 1 > /sys/block/zram0/reset
-	modprobe zram num_devices=2
-	echo 134217728 > /sys/block/zram0/disksize
-	echo 134217728 > /sys/block/zram0/disksize
-	mkswap /dev/block/zram0
-	mkswap /dev/block/zram1
-	swapon /dev/block/zram0
-	swapon /dev/block/zram1
+    echo 1 > /sys/block/zram0/reset
+    modprobe zram num_devices=2
+    echo 134217728 > /sys/block/zram0/disksize
+    echo 134217728 > /sys/block/zram0/disksize
+    mkswap /dev/block/zram0
+    mkswap /dev/block/zram1
+    swapon /dev/block/zram0
+    swapon /dev/block/zram1
+
+# we will remap this as /mnt/sdcard with the sdcard fuse tool
+     mkdir /data/media 0775 media_rw media_rw
+     chown media_rw media_rw /data/media
 
 # data/log
     mkdir /data/log 0775 system log
@@ -141,16 +142,15 @@ on post-fs-data
     chown system radio /sys/class/lcd/panel/lcd_type
     chown system radio /sys/class/lcd/panel/device/hs_toggle
     chown system media_rw /sys/class/lcd/panel/power_reduce
-    chown system system /sys/class/backlight/panel/auto_brightness
+    chown system system /sys/class/graphics/fb0/lcdfreq/level
 
     # change permissions to allow the Ubuntu Touch automatic brightness adjustment feature to function properly
+    chown system system /sys/class/backlight/panel/auto_brightness
     chmod 0666 /sys/class/backlight/panel/auto_brightness
-
-    chown system system /sys/class/backlight/panel/brightness
+    
     # change permissions to allow the Ubuntu Touch brightness slider to function properly
-
+    chown system system /sys/class/backlight/panel/brightness
     chmod 0666 /sys/class/backlight/panel/brightness
-    chown system system /sys/class/graphics/fb0/lcdfreq/level
 
 # Permissions for mDNIe
     chown system media_rw /sys/class/mdnie/mdnie/mode
@@ -530,3 +530,10 @@ service TvoutService_C /system/bin/bintvoutservice
 
 on property:ro.tvout.enable=false
     stop TvoutService_C
+
+# Workaround for broken incall audio
+service bootsnd /system/bin/tinyplay /system/etc/sound/silence.wav -D 0 -d 0 -p 880
+    class late_start
+    user root
+    group audio
+    oneshot
